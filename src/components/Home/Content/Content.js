@@ -1,10 +1,17 @@
 import React from 'react';
-import HeaderContent from '../Header/HeaderContent/HeaderContent';
+import Header from '../Header/Header';
+import Offers from '../Offers/Offers';
+import CustomerReview from '../CustomerReview/CustomerReview';
+import HandleProject from '../HandleProject/HandleProject';
+
 
 const Content = () => {
     return (
         <div>
-            <HeaderContent />
+            <Header></Header>
+            <Offers></Offers>
+            <CustomerReview></CustomerReview>
+            <HandleProject></HandleProject>
         </div>
     );
 };

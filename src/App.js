@@ -7,6 +7,8 @@ import Admin from './components/Admin/Admin';
 import Login from './components/Login/Login';
 import PrivateRoutes from './components/PrivateRoutes/PrivateRoutes';
 import Services from './components/Services/Services';
+import About from './components/About/About';
+import Footer from './components/Footer/Footer';
 /*
 import Shipment from './components/Shipment/Shipment';
 import Order from './components/Order/Order'; */
@@ -41,6 +43,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Content />} />
             <Route path="/services" element={<Services />} />
+            <Route path='/about' element={<About />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/login' element={<Login />} />
             <Route element={<PrivateRoutes />}>
@@ -48,6 +51,7 @@ function App() {
             </Route>
             <Route path="*" element={<NoMatch />} />
           </Routes>
+          <Footer></Footer>
         </div>
       </Router>
     </ServiceContext.Provider>
