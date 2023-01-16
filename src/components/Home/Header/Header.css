@@ -1,3 +1,14 @@
-.header img:hover{
-    animation: pulse 2s infinite;
+#image-box:hover img {
+	-webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-animation: pulse 1s ease-in-out;;
+	animation: pulse 1s ease-in-out;
+}
+@keyframes pulse{
+    0%{
+        transform: scale(.9);
     }
+    100%{
+        transform: scale(1);
+    }
+}

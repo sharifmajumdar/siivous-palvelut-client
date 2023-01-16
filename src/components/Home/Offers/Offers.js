@@ -1,80 +1,104 @@
-import React from 'react';
-import service1 from '../../../images/service1.jpg';
-import service2 from '../../../images/service2.jpg';
-import service3 from '../../../images/service3.jpg';
-import service4 from '../../../images/service4.jpg';
-import service5 from '../../../images/service5.jpg';
-import service6 from '../../../images/service6.jpg';
+import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import Cart from '../../Cart/Cart';
+import { addToDatabaseCart, getDatabaseCart } from '../../../utilities/databaseManager';
 
 const Offers = () => {
+    const [select, setSelect] = useState([]);
+    const [showServices, setShowServices] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/showServices')
+            .then((response) => response.json())
+            .then((data) => {
+                setShowServices(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    });
+
+    useEffect(()=>{
+        const savedCart = getDatabaseCart();
+        const serviceIds = Object.keys(savedCart);
+
+        const cartServices = serviceIds.map(pdId => {
+            const service = showServices.find(pd => pd._id === pdId);
+            return service;
+        });
+        setSelect(cartServices);
+    }, [showServices]);
+
+    //Handling service orders and sending localstorage using keys
+    const addServiceHandler = (showService) => {
+        const newSelect = [...select, showService];
+        setSelect(newSelect);
+        const sameService = newSelect.filter(pd => pd._id === showService._id);
+        const count = sameService.length;
+        addToDatabaseCart(sameService._id, count);
+        //setIsCart(true);
+    }
     return (
         <div className='section'>
             <br />
+            {
+                select.length > 0 &&
+                <div className='col-lg-4 col-xs-12'>
+                    <div>
+                        <Cart cart={select}>
+                            <Link to="/order">
+                                <button className='btn btn-info'>
+                                    Review Order
+                                </button>
+                            </Link>
+                        </Cart>
+                    </div>
+                </div>
+            }
+            <br />
             <h1 className='text-center'>SE Palvelut Services</h1> <br />
             <div className="card-group">
-                <div className="card">
-                    <img className="card-img-top" src={service1} height="250px" alt="Card cap" />
-                    <div className="card-body">
-                        <h5 className="card-title">House Cleaning</h5>
-                        <p className="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error nemo quibusdam ab et mollitia. Ullam blanditiis repellendus perspiciatis corporis necessitatibus!</p>
-                    </div>
-                    <div className="card-footer">
-                        <small className="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-                <div className="card">
-                    <img className="card-img-top" src={service2} height="250px" alt="Card cap" />
-                    <div className="card-body">
-                        <h5 className="card-title">Office Cleaning</h5>
-                        <p className="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae at odio ea vel similique dicta incidunt delectus, repudiandae rem perspiciatis.</p>
-                    </div>
-                    <div className="card-footer">
-                        <small className="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-                <div className="card">
-                    <img className="card-img-top" src={service3} height="250px" alt="Card cap" />
-                    <div className="card-body">
-                        <h5 className="card-title">Industry Cleaning</h5>
-                        <p className="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint quibusdam rem est voluptatibus qui molestias saepe reiciendis sunt autem tempore.</p>
-                    </div>
-                    <div className="card-footer">
-                        <small className="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
+                {
+                    showServices && showServices.slice(0, 3).map(showService =>
+                        <div className="card" key={showService._id}>
+                            <img className="card-img-top" src={showService.image} height="250px" alt="Card cap" />
+                            <div className="card-body">
+                                <h2 className="card-title">{showService.title}</h2>
+                                <p className="card-text">{showService.description}</p>
+                            </div>
+                            <div className="card-footer d-flex justify-content-around">
+                                <div>
+                                    <h5 className='mt-2'>€{showService.price}/hour</h5>
+                                </div>
+                                <div>
+                                    <Link className='btn btn-info' onClick={() => addServiceHandler(showService)}>Book Now</Link>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
             <br />
             <div className="card-group">
-                <div className="card">
-                    <img className="card-img-top" src={service4} height="250px" alt="Card cap" />
-                    <div className="card-body">
-                        <h5 className="card-title">Laundry Services</h5>
-                        <p className="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptates possimus quod sapiente blanditiis illum consequatur inventore aliquid eaque natus quam?</p>
-                    </div>
-                    <div className="card-footer">
-                        <small className="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-                <div className="card">
-                    <img className="card-img-top" src={service5} height="250px" alt="Card cap" />
-                    <div className="card-body">
-                        <h5 className="card-title">Moving Services</h5>
-                        <p className="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur expedita odio maxime aperiam nam? Similique natus expedita voluptatibus optio incidunt?</p>
-                    </div>
-                    <div className="card-footer">
-                        <small className="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
-                <div className="card">
-                    <img className="card-img-top" src={service6} height="250px" alt="Card cap" />
-                    <div className="card-body">
-                        <h5 className="card-title">Custom Services</h5>
-                        <p className="card-text text-right">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Neque aut quas suscipit pariatur ratione perspiciatis voluptatem sed blanditiis a eius!</p>
-                    </div>
-                    <div className="card-footer">
-                        <small className="text-muted">Last updated 3 mins ago</small>
-                    </div>
-                </div>
+                {
+                    showServices && showServices.slice(3, 6).map(showService =>
+                        <div className="card" key={showService._id}>
+                            <img className="card-img-top" src={showService.image} height="250px" alt="Card cap" />
+                            <div className="card-body">
+                                <h2 className="card-title">{showService.title}</h2>
+                                <p className="card-text">{showService.description}</p>
+                            </div>
+                            <div className="card-footer d-flex justify-content-around">
+                                <div>
+                                    <h5 className='mt-2'>€{showService.price}/hour</h5>
+                                </div>
+                                <div>
+                                    <Link className='btn btn-info' onClick={() => addServiceHandler(showService)}>Book Now</Link>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
             </div>
         </div>
     );

@@ -47,8 +47,9 @@ function App() {
             <Route path='/contact' element={<Contact />} />
             <Route path='/login' element={<Login />} />
             <Route element={<PrivateRoutes />}>
-              <Route path='/admin' element={<Admin />} />
+              
             </Route>
+            <Route path='/admin' element={<Admin />} />
             <Route path="*" element={<NoMatch />} />
           </Routes>
           <Footer></Footer>
