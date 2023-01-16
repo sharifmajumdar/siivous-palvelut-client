@@ -17,7 +17,7 @@ const Admin = () => {
 
     // useEffect is used to load from server side 
     useEffect(() => {
-        fetch('http://localhost:5000/showServices')
+        fetch('https://siivous-palvelut-server.vercel.app/showServices')
             .then((response) => response.json())
             .then((data) => {
                 setShowServices(data);
@@ -29,7 +29,7 @@ const Admin = () => {
 
     // Here, react useForm is used to saved data into database
     const onSubmit = () => {
-        fetch('http://localhost:5000/addServices', {
+        fetch('https://siivous-palvelut-server.vercel.app/addServices', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -88,7 +88,7 @@ const Admin = () => {
     const handleDelete = (showService) => {
         const agree = window.confirm(`Are you sure to delete: ${showService.title}`);
         if (agree) {
-            fetch(`http://localhost:5000/showServices/${showService._id}`, {
+            fetch(`https://siivous-palvelut-server.vercel.app/showServices/${showService._id}`, {
                 method: 'DELETE'
             })
                 .then(res => res.json())
