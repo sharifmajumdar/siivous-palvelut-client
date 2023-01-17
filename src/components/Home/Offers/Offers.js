@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Cart from '../../Cart/Cart';
 import { addToDatabaseCart, getDatabaseCart } from '../../../utilities/databaseManager';
@@ -6,6 +7,7 @@ import { addToDatabaseCart, getDatabaseCart } from '../../../utilities/databaseM
 const Offers = () => {
     const [select, setSelect] = useState([]);
     const [showServices, setShowServices] = useState([]);
+    //const navigate = useNavigate();
 
     useEffect(() => {
         fetch('https://siivous-palvelut-server.vercel.app/showServices')
@@ -16,9 +18,9 @@ const Offers = () => {
             .catch((err) => {
                 console.log(err.message);
             });
-    });
+    }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         const savedCart = getDatabaseCart();
         const serviceIds = Object.keys(savedCart);
 
@@ -38,6 +40,11 @@ const Offers = () => {
         addToDatabaseCart(sameService._id, count);
         //setIsCart(true);
     }
+
+    /*     const handleReviewOrder = (e) => {
+            navigate('/orders', { state: { showServices: showServices } });
+            //navigate('/shipment');
+        } */
     return (
         <div className='section'>
             <br />
@@ -71,7 +78,7 @@ const Offers = () => {
                                     <h5 className='mt-2'>€{showService.price}/hour</h5>
                                 </div>
                                 <div>
-                                    <Link className='btn btn-info' onClick={() => addServiceHandler(showService)}>Book Now</Link>
+                                    <button className='btn btn-info' onClick={() => addServiceHandler(showService)}>Book Now</button>
                                 </div>
                             </div>
                         </div>
@@ -79,27 +86,6 @@ const Offers = () => {
                 }
             </div>
             <br />
-            <div className="card-group">
-                {
-                    showServices && showServices.slice(3, 6).map(showService =>
-                        <div className="card" key={showService._id}>
-                            <img className="card-img-top" src={showService.image} height="250px" alt="Card cap" />
-                            <div className="card-body">
-                                <h2 className="card-title">{showService.title}</h2>
-                                <p className="card-text">{showService.description}</p>
-                            </div>
-                            <div className="card-footer d-flex justify-content-around">
-                                <div>
-                                    <h5 className='mt-2'>€{showService.price}/hour</h5>
-                                </div>
-                                <div>
-                                    <Link className='btn btn-info' onClick={() => addServiceHandler(showService)}>Book Now</Link>
-                                </div>
-                            </div>
-                        </div>
-                    )
-                }
-            </div>
         </div>
     );
 };

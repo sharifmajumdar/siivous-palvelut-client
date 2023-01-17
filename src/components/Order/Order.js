@@ -1,25 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getDatabaseCart, removeFromDatabaseCart } from '../../utilities/databaseManager';
 import ReviewItem from '../ReviewItem/ReviewItem';
 import Cart from '../Cart/Cart';
+//import { useLocation } from 'react-router-dom';
+import { ServiceContext } from '../../App';
 
 const Order = () => {
-    const [showServices, setShowServices] = useState([]);
+    const [showServices, setShowServices] = useContext(ServiceContext);
+    //const location = useLocation();
     const [cart, setCart] = useState([]);
     const [orderPlaced] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fetch('https://siivous-palvelut-server.vercel.app/showServices')
-            .then((response) => response.json())
-            .then((data) => {
-                setShowServices(data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-    });
+/*     useEffect(() => {
+        setShowServices(location.state.showServices)
+    }, [location]); */
+
     //This section handle the placing of order and free the cart 
 /*     const handlePlaceOrder = () => {
         setOrderPlaced(true);
@@ -60,8 +57,8 @@ const Order = () => {
                 {
                     cart.map(pd => <ReviewItem 
                         key = {pd._id}
-                        product = {pd}
-                        removeProduct = {removeProduct}></ReviewItem>)
+                        service = {pd}
+                        removeService = {removeService}></ReviewItem>)
                 }
                 { orderPlaced && <h1 style={{marginLeft: "250px", color: "green"}}>Order has been placed!!!</h1> }
                 { cart.length < 1 && orderPlaced === false? <h1 style={{marginLeft: "250px", color: "red"}}>No item selected yet! Please choose an item</h1>:null}

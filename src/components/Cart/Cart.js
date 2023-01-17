@@ -8,9 +8,10 @@ const Cart = (props) => {
     let numberOfServices = 0;
     let msg = "";
     let msg2 = "";
+    //console.log(cart);
     //serviceName.includes(service.title)? numberOfServices -= 1 :
 
-    cart.map(service => (
+    cart && cart.map(service => (
         // eslint-disable-next-line
         numberOfServices += 1, 
         total = total + Number(service.price),

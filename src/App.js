@@ -9,47 +9,45 @@ import PrivateRoutes from './components/PrivateRoutes/PrivateRoutes';
 import Services from './components/Services/Services';
 import About from './components/About/About';
 import Footer from './components/Footer/Footer';
-/*
-import Shipment from './components/Shipment/Shipment';
-import Order from './components/Order/Order'; */
+import Order from './components/Order/Order';
 import {
   BrowserRouter as Router,
   Routes,
   Route
 } from "react-router-dom";
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 
 export const ServiceContext = createContext();
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({});
-  //const [showProducts, setShowProducts] = useState([]);
+  const [showServices, setShowServices] = useState([]);
 
-/*   useEffect(() => {
-    fetch('https://react-node-eshop-server.vercel.app/showProducts')
+  useEffect(() => {
+    fetch('https://siivous-palvelut-server.vercel.app/showServices')
         .then((response) => response.json())
         .then((data) => {
-            setShowProducts(data);
+          setShowServices(data);
         })
         .catch((err) => {
             console.log(err.message);
         });
-}, [showProducts]); */
+}, []);
   return (
-    <ServiceContext.Provider value={[loggedInUser, setLoggedInUser]}>
+    <ServiceContext.Provider value={[showServices, setShowServices, loggedInUser, setLoggedInUser]}>
       <Router>
         <div className='container'>
           <Navbar></Navbar>
           <Routes>
-            <Route exact path="/" element={<Content />} />
-            <Route path="/services" element={<Services />} />
+            <Route exact path="/" element={<Content />} />            
             <Route path='/about' element={<About />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/order' element={<Order />} />
             <Route element={<PrivateRoutes />}>
-              
-            </Route>
-            <Route path='/admin' element={<Admin />} />
+              <Route path="/services" element={<Services />} />
+              <Route path='/admin' element={<Admin />} />
+            </Route>            
             <Route path="*" element={<NoMatch />} />
           </Routes>
           <Footer></Footer>
